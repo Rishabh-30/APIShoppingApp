@@ -32,5 +32,6 @@
     <module>UserAuthService</module>
     <module>UserProductService</module>
     <module>APIGATEWAY</module>
+    <module>EuerkaServer</module>
   </modules>
 </project>
