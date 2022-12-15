@@ -17,5 +17,11 @@ public class AppConfig {
                         .path("/api/v2/**")
                         .uri("http://localhost:8082/")
                 ).build();
+
+
+
+
+
+
     }
 }

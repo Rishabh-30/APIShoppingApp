@@ -26,16 +26,9 @@ public class UserController {
         this.securityTokenGenerator = securityTokenGenerator;
     }
     @PostMapping("/register")
-    public ResponseEntity<?> addUser(@RequestBody User user) throws UserAlreadyExistException {
-        ResponseEntity responseEntity = null;
-        try{
-            responseEntity = new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
-        }catch (UserAlreadyExistException e){
-            throw new UserAlreadyExistException();
-        }catch(Exception e){
-            responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return responseEntity;
+    public ResponseEntity<?> addUser(@RequestBody User user)throws UserAlreadyExistException {
+        User userCreated=userService.addUser(user);
+        return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) throws UserNotFoundException {

@@ -5,8 +5,10 @@ import org.niit.UserProductService.domain.User;
 import org.niit.UserProductService.exception.ProductNotFoundException;
 import org.niit.UserProductService.exception.UserAlreadyExistException;
 import org.niit.UserProductService.exception.UserNotFoundException;
+import org.niit.UserProductService.porxy.UserProxy;
 import org.niit.UserProductService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -16,13 +18,25 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserProxy userProxy;
+
+    public UserServiceImpl(UserRepository userRepository, UserProxy userProxy) {
+        this.userRepository = userRepository;
+        this.userProxy = userProxy;
+    }
 
     @Override
     public User addUser(User user) throws UserAlreadyExistException {
         if(userRepository.findById(user.getUserId()).isPresent()){
             throw new UserAlreadyExistException();
         }
-        return userRepository.save(user);
+        User user1 = userRepository.save(user);
+        if(!(user1.getUserId().isEmpty())){
+            ResponseEntity responseEntity = userProxy.addUser(user);
+            System.out.println(responseEntity.getBody());
+        }
+        return user1;
     }
 
     @Override
